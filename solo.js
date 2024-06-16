@@ -92,11 +92,10 @@ scene('solo', ({ level, score }) => {
         b: [sprite('wall-gold'), 'wall-gold', solid(), 'wall'],
         w: [sprite('brick-wood'), 'wall-brick', solid(), 'wall'],
         p: [sprite('brick-wood'), 'wall-brick-dool', solid(), 'wall'],
-        t: [sprite('door'), 'door', 'wall'],
+        t: [sprite('door'), 'door'],
         '}': [sprite('ghost'), 'dangerous', 'ghost', { dir: -1, timer: 0 }],
         '&': [sprite('slime'), 'slime', { dir: -1 }, 'dangerous', { timer: 0 }],
         '*': [sprite('baloon'), 'baloon', { dir: -1 }, 'dangerous', { timer: 0 }],
-        
     };
 
     const gameLevel = addLevel(maps[level], levelCfg);
@@ -233,9 +232,9 @@ scene('solo', ({ level, score }) => {
     }
 
     function spawnBomber(p) {
-        const obj = add([sprite('boomber'), ('move'), pos(p), scale(1.5),solid(), 'bomber']);
-      
-      
+        const obj = add([sprite('boomber'), ('move'), pos(p), scale(1.5), 'bomber']);
+
+
         obj.pushOutAll();
         obj.play("move");
 
