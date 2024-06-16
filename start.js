@@ -24,7 +24,7 @@ scene('start', () => {
     });
 
     keyPress('m', () => {
-        go('multiplayer', { level: 0, score: 0 });
+        go('multi', { level: 0, score: 0 });
     });
 
     add([
@@ -34,7 +34,7 @@ scene('start', () => {
         pos(width() / 2, height() / 2+50)
     ]);
     add([
-        text('Fernando Dolce, Pedro Santos e Pedro Barraki', 12
+        text('Fernando Dolce, Pedro Santos e Pedro Barraqui', 12
         ),
         origin('center'),
         pos(width() / 2, height() / 2+70)
