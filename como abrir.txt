@@ -1,0 +1,6 @@
+======= COMO ABRIR O JOGO ============
+
+Use o Visual Studio com o GO Live da extensão "Live Server" 
+
+Obrigado.
+Se divirta!

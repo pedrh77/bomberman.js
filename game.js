@@ -43,7 +43,7 @@ loadSprite('explosion', 'sprites/explosion.png', {
     sliceY: 5,
 });
 
-scene('solo', ({ level, score }) => {
+scene('game', ({ level, score }) => {
     layers(['bg', 'obj', 'ui'], 'obj');
 
     const maps = [
@@ -57,29 +57,46 @@ scene('solo', ({ level, score }) => {
             'azazazazazaza a',
             'a zzzzzzzzzzz a',
             'a azazazazazaza',
-            'a  zzzdzzzzzzza',
+            'a  zzzazzzzzzza',
             'a azazazazazaza',
             'azzzzzzzzzzzzza',
-            'azazazazazazaza',
+            'azazazazazazada',
             'azzzzz   &   za',
             'aaaaaaaaaaaaaaa',
         ],
         [
-            'bbbbbbbbbbbbbbb',
-            'bwwww  *wwwwwpb',
-            'bwbwbwbwbwbwbwb',
+            'aaaaaaaaaaaaaaa',
+            'bwwww  *wwwwwwb',
+            'bwbwbwbwbwbwbpb',
             'b      *      b',
-            'bwbwbwbwbwbwb b',
+            'bwbwbwbwbwbb b',
             'bwwww* wwwwwwwb',
             'bwbwbwbwb bwb b',
-            'b wwwpwww}www b',
+            'b  wwpwww}www b',
             'b bwbwbwb bwbwb',
             'b  wwwwwwwwwwwb',
             'b bwbwbwbwbwbwb',
-            'bwww  &   wwwwb',
+            'bwww  &   wwpwb',
             'bwbwbwbwbwbwbwb',
             'bwwwww   &   wb',
-            'bbbbbbbbbbbbbbb',
+            'aaaaaaaaaaaaaaa',
+        ],
+        [
+            'aaaaaaaaaaaaaaa',
+            'a****cc**cc**ta',
+            'a cccccccccccca',
+            'a *c*c*c*c*c*ca',
+            'a**c**c**c**c*a',
+            'a**c**c**c**c*a',
+            'a c*c*c*c*c*c*a',
+            'a ccccccccccc*a',
+            'a c*c*c*c*c*c*a',
+            'a**c**c**c**c*a',
+            'a**c**c**c**c*a',
+            'a*c*c*c*c*c*c*a',
+            'accccccccccccca',
+            'a****cc**cc***a',
+            'aaaaaaaaaaaaaaa',
         ]
     ];
 
@@ -119,7 +136,7 @@ scene('solo', ({ level, score }) => {
             animSpeed: 0.1,
             frame: 14,
         }),
-        pos(20, 190),
+        pos(30, 170),
         { dir: vec2(1, 0) },
         'player'
     ]);
@@ -180,9 +197,10 @@ scene('solo', ({ level, score }) => {
         player.play('idleDown')
     })
 
-    keyPress('enter', () => {
+    keyPress('space', () => {
         spawnBomber(player.pos.add(player.dir.scale(0)))
     })
+
 
     action('baloon', (s) => {
         s.pushOutAll();
@@ -214,6 +232,11 @@ scene('solo', ({ level, score }) => {
         }
     });
 
+    function incrementScore(points) {
+        scoreLabel.value += points;
+        scoreLabel.text = 'Score: ' + scoreLabel.value;
+    }
+
     function spawnKaboom(p, frame) {
         const obj = add([
             sprite('explosion', {
@@ -232,7 +255,7 @@ scene('solo', ({ level, score }) => {
     }
 
     function spawnBomber(p) {
-        const obj = add([sprite('boomber'), ('move'), pos(p), scale(1.5), 'bomber']);
+        const obj = add([sprite('boomber'), ('move'), pos(p), scale(1.2), 'bomber']);
 
 
         obj.pushOutAll();
@@ -263,7 +286,7 @@ scene('solo', ({ level, score }) => {
 
 
     player.collides('door', (d) => {
-        go("solo", {
+        go("game", {
             level: (level + 1) % maps.length,
             score: scoreLabel.value
         });
@@ -304,11 +327,24 @@ scene('solo', ({ level, score }) => {
             go('lose', { score: scoreLabel.value });
         });
     });
+
     player.collides('dangerous', () => {
+        destroy(player);
         go('lose', { score: scoreLabel.value });
     });
+    collides('baloon', 'kaboom', (s) => {
+        incrementScore(100);
+        destroy(s);
+    });
 
-
+    collides('slime', 'kaboom', (s) => {
+        incrementScore(100);
+        destroy(s);
+    });
+    collides('ghost', 'kaboom', (s) => {
+        incrementScore(100);
+        destroy(s);
+    });
 });
 
 scene('lose', ({ score }) => {
@@ -318,14 +354,14 @@ scene('lose', ({ score }) => {
         pos(width() / 2, height() / 2)
     ]);
     add([
-        text('Press Space to Restart or F to Go Back', 12),
+        text('Press Enter to Restart or F to Go Back', 12),
         origin('center'),
         pos(width() / 2, height() / 2 + 30)
     ]);
 
 
-    keyPress('space', () => {
-        go('solo', { level: 0, score: 0 });
+    keyPress('enter', () => {
+        go('game', { level: 0, score: 0 });
     });
 
     keyPress('f', () => {
@@ -333,4 +369,4 @@ scene('lose', ({ score }) => {
     });
 });
 
-start('solo', { level: 0, score: 0 });
+start('game', { level: 0, score: 0 });
